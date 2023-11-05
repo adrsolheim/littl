@@ -47,7 +47,10 @@ public class Lexer {
     }
 
     private void addToken(TokenType tokenType) {
-        if (tokenType == null) return;
+        if (tokenType == null) {
+            Littl.error(line, "Unrecognized symbol found.");
+            return;
+        }
         addToken(tokenType, null);
     }
 
