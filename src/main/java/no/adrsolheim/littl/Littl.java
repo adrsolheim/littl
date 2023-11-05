@@ -1,6 +1,7 @@
 package no.adrsolheim.littl;
 
 import java.io.*;
+import java.util.List;
 
 import static java.lang.StringTemplate.STR;
 
@@ -27,8 +28,8 @@ public class Littl {
     }
 
     public static void run(String sourceCode) {
-        Lexer lexer = new Lexer();
-        List<Token> tokens = lexer.scanTokens(sourceCode);
+        Lexer lexer = new Lexer(sourceCode);
+        List<Token> tokens = lexer.scanTokens();
         for (Token token : tokens) {
             System.out.println(token);
         }
