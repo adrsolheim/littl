@@ -70,6 +70,9 @@ public class Lexer {
         if (peek() != '"') {
             Littl.error(line, "String not closed");
         }
+        
+        advance(); // close string
+
         return TokenType.STRING;
     }
 
