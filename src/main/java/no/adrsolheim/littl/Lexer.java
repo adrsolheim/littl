@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Lexer {
+    private static final char NULL_CHARACTER = '\0';
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
 
@@ -31,24 +32,53 @@ public class Lexer {
     private void scanToken() {
         char c = advance();
         TokenType type = switch (c) {
-            case '(' -> TokenType.LEFT_PAREN;
-            case ')' -> TokenType.RIGHT_PAREN;
-            case '{' -> TokenType.LEFT_BRACE;
-            case '}' -> TokenType.RIGHT_BRACE;
-            case ',' -> TokenType.COMMA;
-            case '.' -> TokenType.DOT;
-            case '-' -> TokenType.MINUS;
-            case '+' -> TokenType.PLUS;
-            case ';' -> TokenType.SEMICOLON;
-            case '*' -> TokenType.STAR;
+            case  '(' -> TokenType.LEFT_PAREN;
+            case  ')' -> TokenType.RIGHT_PAREN;
+            case  '{' -> TokenType.LEFT_BRACE;
+            case  '}' -> TokenType.RIGHT_BRACE;
+            case  ',' -> TokenType.COMMA;
+            case  '.' -> TokenType.DOT;
+            case  '-' -> TokenType.MINUS;
+            case  '+' -> TokenType.PLUS;
+            case  ';' -> TokenType.SEMICOLON;
+            case  '*' -> TokenType.STAR;
+            case  '!' -> nextSymbol('=') ?    TokenType.BANG_EQUAL : TokenType.BANG;
+            case  '=' -> nextSymbol('=') ?   TokenType.EQUAL_EQUAL : TokenType.EQUAL;
+            case  '<' -> nextSymbol('=') ?    TokenType.LESS_EQUAL : TokenType.LESS;
+            case  '>' -> nextSymbol('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER;
+            case  '/' -> nextSymbol('/') ?    skipUntil('\n') : TokenType.SLASH;
+            case  ' ' -> TokenType.SKIP;
+            case '\r' -> TokenType.SKIP;
+            case '\t' -> TokenType.SKIP;
+            case '\n' -> {
+                line++;
+                yield TokenType.SKIP;
+            }
             default -> null;
         };
         addToken(type);
     }
 
+    private TokenType skipUntil(char end) {
+        while(!atEndOfSource() && peek() != '\n') {
+            advance();
+        }
+        return TokenType.SKIP;
+    }
+
+    private boolean nextSymbol(char symbol) {
+        if (atEndOfSource()) return false;
+        if (source.charAt(current) != symbol) return false;
+        current++;
+        return true;
+    }
+
     private void addToken(TokenType tokenType) {
         if (tokenType == null) {
             Littl.error(line, "Unrecognized symbol found.");
+            return;
+        }
+        if (tokenType == TokenType.SKIP) {
             return;
         }
         addToken(tokenType, null);
@@ -57,6 +87,10 @@ public class Lexer {
     private void addToken(TokenType tokenType, Object literal) {
         String lexeme = source.substring(start, current);
         tokens.add(new Token(tokenType, lexeme, literal, line));
+    }
+
+    private char peek() {
+        return atEndOfSource() ? NULL_CHARACTER : source.charAt(current);
     }
 
     public boolean atEndOfSource() {
