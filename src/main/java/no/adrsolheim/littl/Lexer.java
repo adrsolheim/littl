@@ -54,9 +54,23 @@ public class Lexer {
                 line++;
                 yield TokenType.SKIP;
             }
+            case '"' -> string();
             default -> null;
         };
         addToken(type);
+    }
+
+    private TokenType string() {
+        while(!atEndOfSource() && peek() != '"') {
+            if (peek() == '\n') { // newlines within strings
+                line++;
+            }
+            advance();
+        }
+        if (peek() != '"') {
+            Littl.error(line, "String not closed");
+        }
+        return TokenType.STRING;
     }
 
     private TokenType skipUntil(char end) {
@@ -80,6 +94,9 @@ public class Lexer {
         }
         if (tokenType == TokenType.SKIP) {
             return;
+        }
+        if (tokenType == TokenType.STRING) {
+            addToken(tokenType, source.substring(start+1, current-1));
         }
         addToken(tokenType, null);
     }
