@@ -70,10 +70,30 @@ public class Lexer {
         if (peek() != '"') {
             Littl.error(line, "String not closed");
         }
-        
+
         advance(); // close string
 
         return TokenType.STRING;
+    }
+
+    private TokenType number() {
+        // integer part
+        while(!atEndOfSource() && isDigit(peek())) {
+            advance();
+        }
+        // decimal point
+        if (!atEndOfSource() && peek() == '.' && isDigit(doublePeek())) {
+            advance();
+        }
+        // decimal part
+        while(!atEndOfSource() && isDigit(peek())) {
+            advance();
+        }
+        return TokenType.NUMBER;
+    }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
     }
 
     private TokenType skipUntil(char end) {
@@ -101,6 +121,9 @@ public class Lexer {
         if (tokenType == TokenType.STRING) {
             addToken(tokenType, source.substring(start+1, current-1));
         }
+        if (tokenType == TokenType.NUMBER) {
+            addToken(tokenType, Double.parseDouble(source.substring(start+1, current-1)));
+        }
         addToken(tokenType, null);
     }
 
@@ -111,6 +134,9 @@ public class Lexer {
 
     private char peek() {
         return atEndOfSource() ? NULL_CHARACTER : source.charAt(current);
+    }
+    private char doublePeek() {
+        return current+1 >= source.length() ? NULL_CHARACTER : source.charAt(current+1);
     }
 
     public boolean atEndOfSource() {
