@@ -19,5 +19,5 @@ public enum TokenType {
     WHILE, FOR, THIS, PRINT,
     CLASS, SUPER,
 
-    SKIP, EOF
+    SKIP, INVALID, EOF
 }

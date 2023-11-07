@@ -50,14 +50,40 @@ public class Lexer {
             case  ' ' -> TokenType.SKIP;
             case '\r' -> TokenType.SKIP;
             case '\t' -> TokenType.SKIP;
-            case '\n' -> {
-                line++;
-                yield TokenType.SKIP;
-            }
+            case '\n' -> { line++; yield TokenType.SKIP; }
             case '"' -> string();
-            default -> null;
+            default -> {
+                if (isDigit(c)) {
+                    yield number();
+                } else if (isAlpha(c)) {
+                    yield identifier();
+                }
+                yield TokenType.INVALID;
+            }
         };
         addToken(type);
+    }
+
+    private void addToken(TokenType tokenType) {
+        if (tokenType == null) {
+            Littl.error(line, "Unrecognized symbol found.");
+            return;
+        }
+        if (tokenType == TokenType.SKIP) {
+            return;
+        }
+        if (tokenType == TokenType.STRING || tokenType == TokenType.IDENTIFIER) {
+            addToken(tokenType, source.substring(start+1, current-1));
+        }
+        if (tokenType == TokenType.NUMBER) {
+            addToken(tokenType, Double.parseDouble(source.substring(start+1, current-1)));
+        }
+        addToken(tokenType, null);
+    }
+
+    private void addToken(TokenType tokenType, Object literal) {
+        String lexeme = source.substring(start, current);
+        tokens.add(new Token(tokenType, lexeme, literal, line));
     }
 
     private TokenType string() {
@@ -96,6 +122,22 @@ public class Lexer {
         return c >= '0' && c <= '9';
     }
 
+    private TokenType identifier() {
+        while(!atEndOfSource() && isAlphaNumeric(peek())) {
+            advance();
+        }
+        return TokenType.IDENTIFIER;
+    }
+    private boolean isAlpha(char c) {
+        return (c >= 'a' && c <= 'z') ||
+               (c >= 'A' && c <= 'Z') ||
+               (c == '_');
+    }
+
+    private boolean isAlphaNumeric(char c) {
+        return isAlpha(c) || isDigit(c);
+    }
+
     private TokenType skipUntil(char end) {
         while(!atEndOfSource() && peek() != '\n') {
             advance();
@@ -108,28 +150,6 @@ public class Lexer {
         if (source.charAt(current) != symbol) return false;
         current++;
         return true;
-    }
-
-    private void addToken(TokenType tokenType) {
-        if (tokenType == null) {
-            Littl.error(line, "Unrecognized symbol found.");
-            return;
-        }
-        if (tokenType == TokenType.SKIP) {
-            return;
-        }
-        if (tokenType == TokenType.STRING) {
-            addToken(tokenType, source.substring(start+1, current-1));
-        }
-        if (tokenType == TokenType.NUMBER) {
-            addToken(tokenType, Double.parseDouble(source.substring(start+1, current-1)));
-        }
-        addToken(tokenType, null);
-    }
-
-    private void addToken(TokenType tokenType, Object literal) {
-        String lexeme = source.substring(start, current);
-        tokens.add(new Token(tokenType, lexeme, literal, line));
     }
 
     private char peek() {
