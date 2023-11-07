@@ -1,4 +1,15 @@
+
 # (Litt)le (L)anguage
+A little basic and primitive language
+
+Build and run
+```
+mvn clean install
+
+java --enable-preview -jar target/littl-1.0-SNAPSHOT.jar
+```
+
+# Compilers and Interpreters
 A compiler *translates* source code to another -- usually low-level -- form. Source code -> bytecode, or source code -> native code. 
 
 An interpreter reads source code *and executes it* immediately.
