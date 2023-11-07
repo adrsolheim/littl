@@ -92,13 +92,15 @@ public class Lexer {
         if (tokenType == TokenType.SKIP) {
             return;
         }
-        if (tokenType == TokenType.STRING || tokenType == TokenType.IDENTIFIER) {
-            addToken(tokenType, source.substring(start+1, current-1));
+        if (tokenType == TokenType.STRING) {
+            addToken(tokenType, source.substring(start + 1, current - 1));
+        } else if (tokenType == TokenType.IDENTIFIER) {
+            addToken(tokenType, source.substring(start, current));
+        } else if (tokenType == TokenType.NUMBER) {
+            addToken(tokenType, Double.parseDouble(source.substring(start, current)));
+        } else {
+            addToken(tokenType, null);
         }
-        if (tokenType == TokenType.NUMBER) {
-            addToken(tokenType, Double.parseDouble(source.substring(start+1, current-1)));
-        }
-        addToken(tokenType, null);
     }
 
     private void addToken(TokenType tokenType, Object literal) {
