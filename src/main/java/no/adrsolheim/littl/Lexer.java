@@ -1,12 +1,32 @@
 package no.adrsolheim.littl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Lexer {
     private static final char NULL_CHARACTER = '\0';
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
+    private static final Map<String, TokenType> keywords;
+    static {
+        keywords = new HashMap<>();
+        keywords.put("if",     TokenType.IF);
+        keywords.put("else",   TokenType.ELSE);
+        keywords.put("and",    TokenType.AND);
+        keywords.put("or",     TokenType.OR);
+        keywords.put("fun",    TokenType.FUN);
+        keywords.put("return", TokenType.RETURN);
+        keywords.put("var",    TokenType.VAR);
+        keywords.put("nil",    TokenType.NIL);
+        keywords.put("while",  TokenType.WHILE);
+        keywords.put("for",    TokenType.FOR);
+        keywords.put("this",   TokenType.THIS);
+        keywords.put("print",  TokenType.PRINT);
+        keywords.put("class",  TokenType.CLASS);
+        keywords.put("super",  TokenType.SUPER);
+    }
 
     private int start = 0;
     private int current = 0;
@@ -126,7 +146,8 @@ public class Lexer {
         while(!atEndOfSource() && isAlphaNumeric(peek())) {
             advance();
         }
-        return TokenType.IDENTIFIER;
+        String lexeme = source.substring(start, current);
+        return keywords.containsKey(lexeme) ? keywords.get(lexeme) : TokenType.IDENTIFIER;
     }
     private boolean isAlpha(char c) {
         return (c >= 'a' && c <= 'z') ||
