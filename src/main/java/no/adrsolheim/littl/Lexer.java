@@ -76,7 +76,7 @@ public class Lexer {
                 if (isDigit(c)) {
                     yield number();
                 } else if (isAlpha(c)) {
-                    yield identifier();
+                    yield identifierOrKeyword();
                 }
                 yield TokenType.INVALID;
             }
@@ -144,7 +144,7 @@ public class Lexer {
         return c >= '0' && c <= '9';
     }
 
-    private TokenType identifier() {
+    private TokenType identifierOrKeyword() {
         while(!atEndOfSource() && isAlphaNumeric(peek())) {
             advance();
         }
