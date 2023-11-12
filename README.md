@@ -53,3 +53,37 @@ An interpreter reads source code *and executes it* immediately.
 - Prototypes - Objects only, and they contain methods, inheritance chain and state.
 
 
+# Visitor Pattern
+Separate algorithms from objects instead of implementing functionality within the object's classes. Create new operations or tweak existing 
+functionality without modifying existing object structures. Each class can be visited by a visitor. A visitor implements 
+an algorithm and runs it on the object it visits.
+
+A base class `Language` define an abstract `accept(Visitor);` method
+```
+// all subclasses implement
+accept(Visitor visitor) {
+  visitor.visit(this);
+}
+```
+A visitor method is declared for all possible subclasses. A new subclass means a new visit method aswell
+```
+interface Visitor {
+  visit(SpanishLanguage language);
+  visit(EnglishLanguage language);
+}
+```
+Algorithms are decoupled from their corresponding data classes (in this case, languages), and we can have different implementations
+```
+class InterpreterVisitor implements Visitor {
+  visit(SpanishLanguage language) { /* code for interpreting spanish */ }
+  visit(EnglishLanguage language) { /* code for interpreting english */ }
+}
+
+class TyposCorrectionVisitor implements Visitor {
+  visit(SpanishLanguage language) { /* code for correcting spanish typos */ }
+  visit(EnglishLanguage language) { /* code for correcting english typos */ }
+}
+
+spanishLanguage.accept(new InterpreterVisitor());
+englishLanguage.accept(new TyposCorrectionVisitor());
+```
