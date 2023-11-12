@@ -2,12 +2,19 @@ package no.adrsolheim.littl;
 
 public abstract class Expr {
 
+    abstract <R> R accept(Visitor<R> visitor);
+
     public static class Literal extends Expr {
 
         final Object value;
 
         public Literal (Object value) {
             this.value = value;
+        }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visit(this);
         }
     }
 
@@ -22,6 +29,11 @@ public abstract class Expr {
             this.operator = operator;
             this.right = right;
         }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visit(this);
+        }
     }
 
     public static class Unary extends Expr {
@@ -33,6 +45,11 @@ public abstract class Expr {
             this.operator = operator;
             this.expr = expr;
         }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visit(this);
+        }
     }
 
     public static class Grouping extends Expr {
@@ -42,6 +59,19 @@ public abstract class Expr {
         public Grouping (Expr expr) {
             this.expr = expr;
         }
+
+        @Override
+        public <R> R accept(Visitor<R> visitor) {
+            return visitor.visit(this);
+        }
+    }
+
+
+    interface Visitor<R> {
+        <R> R visit(Literal expr);
+        <R> R visit(Binary expr);
+        <R> R visit(Unary expr);
+        <R> R visit(Grouping expr);
     }
 
 }
