@@ -3,10 +3,10 @@ package no.adrsolheim.littl;
 import java.util.Objects;
 
 public class Token {
-    private final TokenType tokenType;
-    private final String lexeme;
-    private final Object literal;
-    private final int line;
+    final TokenType tokenType;
+    final String lexeme;
+    final Object literal;
+    final int line;
 
     public Token(TokenType tokenType, String lexeme, Object literal, int line) {
         this.tokenType = tokenType;
