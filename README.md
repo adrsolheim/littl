@@ -9,6 +9,12 @@ mvn clean install
 java --enable-preview -jar target/littl-1.0-SNAPSHOT.jar
 ```
 
+Scripts
+```
+// arg: output directory, defaults to '.'
+java --enable-preview --source 21 GenerateExpressionTypes.java ..
+```
+
 # Compilers and Interpreters
 A compiler *translates* source code to another -- usually low-level -- form. Source code -> bytecode, or source code -> native code. 
 
