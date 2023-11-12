@@ -29,7 +29,10 @@ public class GenerateExpressionTypes {
 
                     public abstract class \{baseName} {
 
+                        abstract <R> R accept(Visitor<R> visitor);
+
                     \{expressionTypes.stream().map(exprType -> definitionToClass(exprType, baseName)).collect(Collectors.joining("\n"))}
+                    \{visitorInterface(baseName, expressionTypes, 4)}
                     }
                     """);
         }
@@ -50,6 +53,11 @@ public class GenerateExpressionTypes {
 
                         public \{className} (\{String.join(", ", params)}) {
                             \{paramAssignments(params, 12)}
+                        }
+
+                        @Override
+                        public <R> R accept(Visitor<R> visitor) {
+                            return visitor.visit(this);
                         }
                     }
                 """;
@@ -74,6 +82,21 @@ public class GenerateExpressionTypes {
             newline = "\n" + pad(indent);
         }
         return sb.toString();
+    }
+
+    private static String visitorInterface(String baseName, List<String> expressionTypes, int indent) {
+        List<String> expressions = expressionTypes.stream()
+                .map(e -> e.split(":")[0].strip())
+                .collect(Collectors.toList());
+        String newline = "\n" + pad(indent+4);
+        String ws = pad(indent); // whitespace indentation
+
+        return STR."""
+
+                \{ws}interface Visitor<R> {
+                \{ws}    \{expressions.stream().map(expr -> String.format("<R> R visit(%s %s);", expr, baseName.toLowerCase())).collect(Collectors.joining(newline))}
+                \{ws}}
+                """;
     }
 
     private static String pad(int n) {
