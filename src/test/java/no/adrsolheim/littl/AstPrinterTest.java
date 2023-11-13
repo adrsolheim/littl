@@ -26,7 +26,7 @@ class AstPrinterTest {
                 )
         );
         String result = expressions.accept(visitor);
-        String expected = "-(+(70) grouping(-55) ) ";
+        String expected = "(- (+ 7 0) (grouping -55))";
 
         Assertions.assertEquals(expected, result);
     }

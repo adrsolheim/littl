@@ -28,12 +28,13 @@ public class AstPrinter implements Expr.Visitor<String> {
 
     String parensWrap(String name, Expr... exprs) {
         StringBuilder sb = new StringBuilder();
-        sb.append(name);
         sb.append("(");
+        sb.append(name);
         for (Expr expr : exprs) {
+            sb.append(" ");
             sb.append(expr.accept(this));
         }
-        sb.append(") ");
+        sb.append(")");
         return sb.toString();
     }
 }
