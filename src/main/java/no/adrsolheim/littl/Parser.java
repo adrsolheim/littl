@@ -55,7 +55,25 @@ public class Parser {
     }
 
     private Expr comparison() {
-        return null;
+        Expr expr = term();
+        while(match(TokenType.LESS, TokenType.LESS_EQUAL, TokenType.GREATER, TokenType.GREATER_EQUAL)) {
+            Token operator = previous();
+            Expr right = term();
+            expr = new Expr.Binary(expr, operator right);
+        }
     }
 
+    private Expr term() {
+        Expr expr = factor();
+        while(match(TokenType.MINUS, TokenType.PLUS, TokenType.SLASH, TokenType.STAR)) {
+            Token operator = previous();
+            Expr right = factor();
+            expr = new Expr.Binary(expr, operator, right);
+        }
+        return expr;
+    }
+
+    private Expr factor() {
+        return null;
+    }
 }
