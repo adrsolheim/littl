@@ -21,15 +21,15 @@ public class Parser {
     }
 
     private boolean check(TokenType type) {
-        return atEnd() ? false : type == peek();
+        return atEnd() ? false : type == peek().tokenType;
     }
 
     private boolean atEnd() {
         return tokens.get(current).tokenType == TokenType.EOF;
     }
 
-    private TokenType peek() {
-        return tokens.get(current).tokenType;
+    private Token peek() {
+        return tokens.get(current);
     }
 
     private Token previous() {
@@ -107,15 +107,22 @@ public class Parser {
         return null;
     }
 
-    private void consume(TokenType expected, String message) {
-        if (expected == TokenType.LEFT_PAREN) {
-            List<TokenType> illegalTypes = List.of(TokenType.EOF, TokenType.RIGHT_BRACE, TokenType.LEFT_PAREN, TokenType.LEFT_BRACE);
-            for (int i = current;;i++) {
-                if (illegalTypes.contains(tokens.get(i))){
-                    System.out.println(message);
-                    break;
-                }
-            }
+    private TokenType consume(TokenType expected, String message) {
+        if(check(expected)) {
+            return advance();
+        }
+        throw error(message);
+    }
+
+    private ParserError error(String message) {
+        Token token = tokens.get(current);
+        Littl.error(token.line, message);
+        return new ParserError(message);
+    }
+
+    private static class ParserError extends RuntimeException {
+        ParserError(String message) {
+            super(message);
         }
     }
 }
