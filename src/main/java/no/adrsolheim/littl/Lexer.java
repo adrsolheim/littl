@@ -86,7 +86,7 @@ public class Lexer {
 
     private void addToken(TokenType tokenType) {
         if (tokenType == null) {
-            Littl.error(line, "Unrecognized symbol found.");
+            Littl.lexerError(line, "Unrecognized symbol found.");
             return;
         }
         if (tokenType == TokenType.SKIP) {
@@ -116,7 +116,7 @@ public class Lexer {
             advance();
         }
         if (peek() != '"') {
-            Littl.error(line, "String not closed");
+            Littl.lexerError(line, "String not closed");
         }
 
         advance(); // close string

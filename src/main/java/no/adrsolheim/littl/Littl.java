@@ -58,8 +58,13 @@ public class Littl {
         }
     }
 
-    public static void error(int line, String message) {
+    public static void parserError(int line, Token trigger) {
+        String message = trigger.tokenType == TokenType.EOF ? "[ParserError] at end of source file" : String.format(" at '%s'", trigger.lexeme);
         reportError(line, "", message);
+    }
+
+    public static void lexerError(int line, String message) {
+        reportError(line, "", "[LexerError] " + message);
     }
 
     private static void reportError(int line, String location, String message) {
