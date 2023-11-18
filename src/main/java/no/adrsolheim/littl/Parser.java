@@ -116,7 +116,7 @@ public class Parser {
 
     private ParserError error(String message) {
         Token token = peek();
-        Littl.parserError(token.line, message);
+        Littl.parserError(token.line, token);
         return new ParserError(message);
     }
 
