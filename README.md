@@ -93,3 +93,10 @@ class TyposCorrectionVisitor implements Visitor {
 spanishLanguage.accept(new InterpreterVisitor());
 englishLanguage.accept(new TyposCorrectionVisitor());
 ```
+
+# Parser
+
+1. Produce a syntax tree from a valid sequence of tokens
+2. Detect any errors and report them to the user
+
+Error recovery enable the parser to recover from errors it encounters during parsing to continue reporting syntax errors. The parser should detect as many *distinct* errors as possible in one swoop through the source code. Encountering a syntax error triggers *panic mode* which aims at returning to the next statement and continue parsing in order to detect any future errors.
