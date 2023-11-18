@@ -125,4 +125,15 @@ public class Parser {
             super(message);
         }
     }
+
+    private void synchronize() {
+        advance();
+
+        while(!atEnd()) {
+            if(peek().tokenType.isStartOfStatement()) {
+                return;
+            }
+            advance();
+        }
+    }
 }
