@@ -1,9 +1,7 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AstPrinterTest {
 

@@ -1,4 +1,4 @@
-package no.adrsolheim.littl.scripts;
+package no.adrsolheim.lit.scripts;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -25,7 +25,7 @@ public class GenerateExpressionTypes {
         String fileName = STR."\{outputDir}/\{baseName}.java".replace("//","/");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(STR."""
-                    package no.adrsolheim.littl;
+                    package no.adrsolheim.lit;
 
                     public abstract class \{baseName} {
 

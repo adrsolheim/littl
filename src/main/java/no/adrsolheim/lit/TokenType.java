@@ -1,4 +1,4 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 public enum TokenType {
     // single-character tokens

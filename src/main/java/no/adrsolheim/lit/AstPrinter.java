@@ -1,4 +1,4 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 public class AstPrinter implements Expr.Visitor<String> {
 

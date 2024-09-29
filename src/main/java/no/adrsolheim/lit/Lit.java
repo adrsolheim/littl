@@ -1,11 +1,11 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 import java.io.*;
 import java.util.List;
 
 import static java.lang.StringTemplate.STR;
 
-public class Littl {
+public class Lit {
 
     private static final int COMMAND_INCORRECTLY_USED = 64;
     private static final int INPUT_DATA_INCORRECT = 65;

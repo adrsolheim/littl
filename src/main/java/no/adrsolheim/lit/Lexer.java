@@ -1,4 +1,4 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class Lexer {
 
     private void addToken(TokenType tokenType) {
         if (tokenType == null) {
-            Littl.lexerError(line, "Unrecognized symbol found.");
+            Lit.lexerError(line, "Unrecognized symbol found.");
             return;
         }
         if (tokenType == TokenType.SKIP) {
@@ -116,7 +116,7 @@ public class Lexer {
             advance();
         }
         if (peek() != '"') {
-            Littl.lexerError(line, "String not closed");
+            Lit.lexerError(line, "String not closed");
         }
 
         advance(); // close string

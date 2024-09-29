@@ -1,4 +1,4 @@
-package no.adrsolheim.littl;
+package no.adrsolheim.lit;
 
 import java.util.List;
 
@@ -116,7 +116,7 @@ public class Parser {
 
     private ParserError error(String message) {
         Token token = peek();
-        Littl.parserError(token.line, token);
+        Lit.parserError(token.line, token);
         return new ParserError(message);
     }
 
